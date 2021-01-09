@@ -41,7 +41,7 @@ def movies_load(path):
 
 
 # 读取tmdb_5000_movies数据集
-path_movies = r'D:\myfile\机器学习及推荐系统\24、python-机器学习-进阶实战\唐宇迪-机器学习-进阶实战-资料\14.基于统计分析的电影推荐\电影推荐\tmdb_5000_movies.csv'
+path_movies = r'D:\PandaLearning\tmdb_5000_movies.csv'
 data_movies = movies_load(path_movies)
 data_movies.head()
 
@@ -63,7 +63,7 @@ def load_credits(path):
 # In[5]:
 
 
-path_credits = r'D:\myfile\机器学习及推荐系统\24、python-机器学习-进阶实战\唐宇迪-机器学习-进阶实战-资料\14.基于统计分析的电影推荐\电影推荐\tmdb_5000_credits.csv'
+path_credits = r'D:\PandaLearning\tmdb_5000_credits.csv'
 data_credits = load_credits(path_credits)
 data_credits.head()
 
