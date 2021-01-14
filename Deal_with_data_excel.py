@@ -2,6 +2,8 @@
 import numpy as np
 import pandas as pd
 import json
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
 
 pd.set_option('display.max_columns',1000)
 pd.set_option('display.width', 1000)
@@ -34,7 +36,7 @@ def extract_from_name(feature):
 extract_columns = ['cast', 'crew']
 df_credits[extract_columns] = df_credits[extract_columns].applymap(extract_from_name)
 df_credits.rename(columns={'cast': 'actors', 'crew': 'director'}, inplace=True)
-print(df_credits.head())
+# print(df_credits.head())
 
 
 df_movies=pd.read_csv("tmdb_5000_movies.csv")
@@ -43,4 +45,42 @@ df_movies["genres"] = df_movies["genres"].apply(json.loads)
 df_movies[extract_columns_2] = df_movies[extract_columns_2].applymap(extract_from_name)
 df_movies.rename(columns={'genres': 'type'}, inplace=True)
 df_movies=df_movies[['budget','type','id','release_date','vote_average','vote_count']]
-print(df_movies.head())
+# print(df_movies.head())
+
+
+# credits 和 movies数据合并 以ID为目标
+data = pd.merge(df_credits, df_movies, left_on='movie_id', right_on='id')
+# print(data.head())
+
+
+# 将人的名字合并在一个text中
+# def actors_movies(df):
+#     my_df = df.copy()
+#
+#     actor_movies = {}
+#     actors_array = data['actors'].apply(lambda x: x.split('|')).values
+#     for actors in actors_array:
+#         for actor in actors:
+#             actor_movies.setdefault(actor, 0)
+#             actor_movies[actor] += 1
+#
+#     return actor_movies
+
+# 'float' object has no attribute 'split' --> such errors mostly caused by NaN representing empty cells
+data.fillna("empty",inplace=True)
+
+text = "Medical device makers have relied on silicone adhesives for decades. But as they scale up for larger volumes, manufacturers are increasingly looking for a number of ways to enhance their processes.NuSil® brand biocompatible silicone adhesives can help. Consult with us to learn how we can help you select the right long-term medical adhesive or custom adhesives formulation for your application."
+
+wordcloud = WordCloud().generate(text)
+
+# Display the generated image:
+# the matplotlib way:
+plt.imshow(wordcloud, interpolation='bilinear')
+plt.axis("off")
+
+# lower max_font_size
+wordcloud = WordCloud(max_font_size=40).generate(text)
+plt.figure()
+plt.imshow(wordcloud, interpolation="bilinear")
+plt.axis("off")
+plt.show()
