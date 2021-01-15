@@ -74,6 +74,7 @@ data.fillna("empty|Empty",inplace=True)
 # text = dict(sorted(actor_movies.items(), key=lambda x: x[1], reverse=True)[: 50])
 
 actors_array = data['actors'].apply(lambda x: x.split('|')).values
+director_array=data['director']
 
 def gettext(feature):
 # 确保不是空置，len
@@ -84,19 +85,35 @@ def gettext(feature):
         text.append(str(feature[i]))
     return text
 
-text=gettext(actors_array)
-text=str(text)
+text_a=gettext(actors_array)
+text_a=str(text_a)
 
+text_d=gettext(director_array)
+text_d=str(text_d)
 
-wordcloud = WordCloud().generate(text)
+wordcloud = WordCloud().generate(text_a)
 
 # Display the generated image:
 # the matplotlib way:
-plt.imshow(wordcloud, interpolation='bilinear')
-plt.axis("off")
+# plt.imshow(wordcloud, interpolation='bilinear')
+# plt.axis("off")
 
 # lower max_font_size
-wordcloud = WordCloud(max_font_size=40).generate(text)
+wordcloud = WordCloud(max_font_size=40).generate(text_a)
+plt.figure()
+plt.imshow(wordcloud, interpolation="bilinear")
+plt.axis("off")
+plt.show()
+#
+wordcloud = WordCloud().generate(text_d)
+#
+# # Display the generated image:
+# # the matplotlib way:
+# plt.imshow(wordcloud, interpolation='bilinear')
+# plt.axis("off")
+#
+# lower max_font_size
+wordcloud = WordCloud(max_font_size=40).generate(text_d)
 plt.figure()
 plt.imshow(wordcloud, interpolation="bilinear")
 plt.axis("off")
