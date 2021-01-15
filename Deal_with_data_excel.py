@@ -19,7 +19,6 @@ def extract_from_name(feature):
 # 确保不是空置，len
     if len(feature) == 0:
         return np.nan
-
     # 返回导演名字
     if 'job' in feature[0].keys():
 # 遍历所有的行的数据
@@ -53,6 +52,12 @@ data = pd.merge(df_credits, df_movies, left_on='movie_id', right_on='id')
 # print(data.head())
 
 
+
+
+# 'float' object has no attribute 'split' --> such errors mostly caused by NaN representing empty cells
+data.fillna("empty|Empty",inplace=True)
+
+
 # 将人的名字合并在一个text中
 # def actors_movies(df):
 #     my_df = df.copy()
@@ -65,11 +70,23 @@ data = pd.merge(df_credits, df_movies, left_on='movie_id', right_on='id')
 #             actor_movies[actor] += 1
 #
 #     return actor_movies
+# actor_movies = actors_movies(data)
+# text = dict(sorted(actor_movies.items(), key=lambda x: x[1], reverse=True)[: 50])
 
-# 'float' object has no attribute 'split' --> such errors mostly caused by NaN representing empty cells
-data.fillna("empty",inplace=True)
+actors_array = data['actors'].apply(lambda x: x.split('|')).values
 
-text = "Medical device makers have relied on silicone adhesives for decades. But as they scale up for larger volumes, manufacturers are increasingly looking for a number of ways to enhance their processes.NuSil® brand biocompatible silicone adhesives can help. Consult with us to learn how we can help you select the right long-term medical adhesive or custom adhesives formulation for your application."
+def gettext(feature):
+# 确保不是空置，len
+    if len(feature) == 0:
+        return np.nan
+    text=[]
+    for i in range(len(feature)):
+        text.append(str(feature[i]))
+    return text
+
+text=gettext(actors_array)
+text=str(text)
+
 
 wordcloud = WordCloud().generate(text)
 
